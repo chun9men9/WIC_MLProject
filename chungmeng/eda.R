@@ -13,6 +13,17 @@ dim(house_train)
 str(house_train)
 names(house_train)
 
+
+varlist=data.frame(
+  var_type=sapply(house_train,class),
+  owner=c(rep('Theo',20),
+          rep('Iman',20),
+          rep('Chung',20),
+          rep('Wing',21))
+)
+
+write.csv(varlist,file = 'variable_list.csv')
+
 library(VIM)
 aggr(house_train)
 library(mice)
