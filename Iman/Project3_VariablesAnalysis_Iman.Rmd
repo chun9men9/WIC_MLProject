@@ -221,20 +221,20 @@ corr_ordcnttran
 
 ```
 
-### Boxplots
-```{r boxplots}
+### Histograms
+```{r histograms}
 numeric_df <- house_sub %>% select(numeric_features)
-#numeric_melt  <- melt(numeric_df)
-ggplot(data = numeric_df, mapping = aes(x = value, y=)) + 
+numeric_melt  <- melt(numeric_df)
+ggplot(data = numeric_melt, mapping = aes(x = value)) + 
     geom_histogram(bins = 10) + facet_wrap(~variable, scales = 'free_x')
 
 ```
-
+#Boxplots
 ```{r boxplots}
 ordinal_df <- house_sub %>% select(ordinal_features)
-ordinal_melt  <- melt(ordinal_df)
-ggplot(data = ordinal_melt, mapping = aes(x = value)) + 
-    geom_boxplot() + facet_wrap(~variable, scales = 'free_x')
+#ordinal_melt  <- melt(ordinal_df)
+ggplot(data = house_sub, mapping = aes(x = RoofStyle, y=SalePrice)) + geom_boxplot()
+#+ facet_wrap(~variable, scales = 'free_x')
 
 ```
 
@@ -251,7 +251,7 @@ miss_df <- colSums(house_sub[, c(1:40)] == '', na.rm = TRUE)
 miss_df
 ```
 
-``` {r na_sum}
+``` {r na_sum1}
 sum(is.na(house_sub$YearRemodAdd))
 sum(is.na(house_sub$RoofStyle))
 sum(is.na(house_sub$RoofMatl))
@@ -294,7 +294,7 @@ sum(house_sub$SalePrice < (quantile(house_sub$SalePrice, .25) - 1.5*IQR(house_su
 sum(house_sub$SalePrice > (quantile(house_sub$SalePrice, .75) + 1.5*IQR(house_sub$SalePrice)))
 ```
 #Categorical Values
-``` {r na_sum}
+``` {r outlier_table}
 apply(house_sub, MARGIN = 2, table)
 ```
 
