@@ -1,0 +1,82 @@
+,var_type,owner,var_info,Levels / range,Significance (0-5),missingness,outliers
+Id,integer,Theo,,,,,
+MSSubClass,integer,Theo,,,,,
+MSZoning,character,Theo,,,,,
+LotFrontage,character,Theo,,,,,
+LotArea,integer,Theo,,,,,
+Street,character,Theo,,,,,
+Alley,character,Theo,,,,,
+LotShape,character,Theo,,,,,
+LandContour,character,Theo,,,,,
+Utilities,character,Theo,,,,,
+LotConfig,character,Theo,,,,,
+LandSlope,character,Theo,,,,,
+Neighborhood,character,Theo,,,,,
+Condition1,character,Theo,,,,,
+Condition2,character,Theo,,,,,
+BldgType,character,Theo,,,,,
+HouseStyle,character,Theo,,,,,
+OverallQual,integer,Theo,,,,,
+OverallCond,integer,Theo,,,,,
+YearBuilt,integer,Theo,,,,,
+YearRemodAdd,integer,Iman,Remodel date (same as construction date if no remodeling or additions),,,0,1950 must mean (<= 1950)
+RoofStyle,character,Iman,Type of roof,"Flat: Flat, Gable: Gable, Gambrel: Gabrel (Barn), Hip: Hip, Mansard: Mansard, Shed: Shed",,0,"Flat 13, Gambrel 11, Mansard 7, Shed 2"
+RoofMatl,character,Iman,Roof material,"ClyTile: Clay or Tile, CompShg: Standard (Composite) Shingle, Membran: Membrane, Metal: Metal, Roll: Roll, Tar&Grv: Gravel & Tar, WdShake: Wood Shakes, WdShngl: Wood Shingles",,0,"ClyTile 1, Membran 1, Metal 1, Roll 1, Tar&Grv 11, WdShake 5, WdShngl 6"
+Exterior1st,character,Iman,Exterior covering on house,"AsbShng: Asbestos Shingles, AsphShn :Asphalt Shingles, BrkComm: Brick Common, BrkFace: Brick Face, CBlock: Cinder Block, CemntBd: Cement Board, HdBoard: Hard Board, ImStucc: Imitation Stucco, MetalSd: Metal Siding, Other: Other, Plywood: Plywood, PreCast PreCast, Stone: Stone, Stucco: Stucco, VinylSd: Vinyl Siding, Wd Sdng: Wood Siding, WdShing: Wood Shingles",,0,"AsbShg 20, AsphShn 1, BrkComm 2, Cblock 1, ImStucc 1, Stone 2, Stucco 25, WdShing 26"
+Exterior2nd,character,Iman,Exterior covering on house (if more than one material),"AsbShng: Asbestos Shingles, AsphShn :Asphalt Shingles, BrkComm: Brick Common, BrkFace: Brick Face, CBlock: Cinder Block, CemntBd: Cement Board, HdBoard: Hard Board, ImStucc: Imitation Stucco, MetalSd: Metal Siding, Other: Other, Plywood: Plywood, PreCast PreCast, Stone: Stone, Stucco: Stucco, VinylSd: Vinyl Siding, Wd Sdng: Wood Siding, WdShing: Wood Shingles",,0,"AsbShng 20, AsphShn 3, BrkCmn 7, Cblock 1, Other 1, Stone 5, Stucco 26"
+MasVnrType,character,Iman,Masonry veneer type,"BrkCmn: Brick Common, BrkFace: Brick Face, Cblock: Cinder Block, None: None, Stone :Stone",,8,BrkCmn 15
+MasVnrArea,character,Iman,Masonry veneer area in square feet,,,8,
+ExterQual,character,Iman,Evaluates the quality of the material on the exterior,"Ex: Excellent, Gd: Good, TA: Average/Typical, Fa: Fair, Po: Poor",5,0,Fa 14
+ExterCond,character,Iman,Evaluates the present condition of the material on the exterior,"Ex: Excellent, Gd: Good, TA: Average/Typical, Fa: Fair, Po: Poor",,0,"Ex 3, Po 1"
+Foundation,character,Iman,Type of foundation,"BrkTil: Brick & Tile, Cblock: Cinder Block, Pconc: Poured Contrete, Slab: Slab, Stone: Stone, Wood: Wood",-4,0,"Stone 6, Wood 3"
+BsmtQual,character,Iman,Evaluates the heightof the basement,"Ex: Excellent (100+ inches), Gd: Good (90-99 inches), TA: Typical (80-89 inches), Fa: Fair (70-79 inches), Po: Poor (<70 inches), NA: No Basement",5,37,
+BsmtCond,character,Iman,Evaluates the general condition of the basement,"Ex: Excellent, Gd: Good, TA: Average/Typical, Fa: Fair, Po: Poor",,37,
+BsmtExposure,character,Iman,Refers to walkout or garden level walls,"Gd Good Exposure, Av Average Exposure, (split levels or foyers typically score average or above), Mn Mimimum Exposure, No No Exposure, NA No Basement",3,38,
+BsmtFinType1,character,Iman,Rating of basement finished area,"GLQ Good Living Quarters, ALQ Average Living Quarters, BLQ Below Average Living Quarters, Rec Average Rec Room, LwQ Low Quality, Unf Unfinshed, NA No Basement",,37,
+BsmtFinSF1,integer,Iman,Type 1 finished square feet,,,0,7 (positive)
+BsmtFinType2,character,Iman,Rating of basement finished area (if multiple types),"GLQ Good Living Quarters, ALQ Average Living Quarters, BLQ Below Average Living Quarters, Rec Average Rec Room, LwQ Low Quality, Unf Unfinshed, NA No Basement",,38,"ALQ 19, GLQ 14"
+BsmtFinSF2,integer,Iman,Type 2 finished square feet,,,0,167 (positive)
+BsmtUnfSF,integer,Iman,Unfinished square feet of basement area,,,0,29 (positive)
+TotalBsmtSF,integer,Iman,Total square feet of basement area,,,0,"37 (negative), 24 (positive)"
+Heating,character,Iman,Type of heating,"Floor: Floor Furnace, GasA: Gas forced warm air furnace, GasW: Gas hot water or steam heat, Grav: Gravity furnace, OthW: Hot water or steam heat other than gas, Wall: Wall furnace",,0,"Floor 1, GasW 18, Grav 7, OthW 2, Wall 4"
+HeatingQC,character,Chung,,,,,
+CentralAir,character,Chung,,,,,
+Electrical,character,Chung,,,,,
+X1stFlrSF,integer,Chung,,,,,
+X2ndFlrSF,integer,Chung,,,,,
+LowQualFinSF,integer,Chung,,,,,
+GrLivArea,integer,Chung,,,,,
+BsmtFullBath,integer,Chung,,,,,
+BsmtHalfBath,integer,Chung,,,,,
+FullBath,integer,Chung,,,,,
+HalfBath,integer,Chung,,,,,
+BedroomAbvGr,integer,Chung,,,,,
+KitchenAbvGr,integer,Chung,,,,,
+KitchenQual,character,Chung,,,,,
+TotRmsAbvGrd,integer,Chung,,,,,
+Functional,character,Chung,,,,,
+Fireplaces,integer,Chung,,,,,
+FireplaceQu,character,Chung,,,,,
+GarageType,character,Chung,,,,,
+GarageYrBlt,character,Chung,,,,,
+GarageFinish,character,Wing,,,,,
+GarageCars,integer,Wing,,,,,
+GarageArea,integer,Wing,,,,,
+GarageQual,character,Wing,,,,,
+GarageCond,character,Wing,,,,,
+PavedDrive,character,Wing,,,,,
+WoodDeckSF,integer,Wing,,,,,
+OpenPorchSF,integer,Wing,,,,,
+EnclosedPorch,integer,Wing,,,,,
+X3SsnPorch,integer,Wing,,,,,
+ScreenPorch,integer,Wing,,,,,
+PoolArea,integer,Wing,,,,,
+PoolQC,character,Wing,,,,,
+Fence,character,Wing,,,,,
+MiscFeature,character,Wing,,,,,
+MiscVal,integer,Wing,,,,,
+MoSold,integer,Wing,,,,,
+YrSold,integer,Wing,,,,,
+SaleType,character,Wing,,,,,
+SaleCondition,character,Wing,,,,,
+SalePrice,integer,Wing,,,,,61 (positive)
