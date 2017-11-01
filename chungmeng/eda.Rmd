@@ -1,0 +1,113 @@
+---
+title: "EDA"
+author: "chungmeng"
+date: "October 31, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r Initialization}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+setwd("C:/Users/cmlim/Dropbox/NYC Data Science/Class/Machine Learning Project/chungmeng")
+house_train <- read.csv("../data/train.csv", 
+                        header = TRUE, 
+                        na.strings = "",
+                        stringsAsFactors = FALSE)
+```
+
+##Columns of Interest
+
+Extract Columns [41:60] & Price
+```{r mycols}
+myhouse_train=house_train[,41:60]
+myhouse_train=cbind(myhouse_train,house_train[81])
+names(myhouse_train)
+```
+## Missingness
+```{r Missingness}
+
+colSums(is.na(myhouse_train))
+#colSums(myhouse_train=="")
+```
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+myhouse_train$GarageYrBlt=as.numeric(myhouse_train$GarageYrBlt)
+summary(myhouse_train)
+
+```
+## Square Foot Plots (4 Variables)
+```{r}
+
+ggplot(myhouse_train, aes(x=X1stFlrSF))+geom_histogram()+ggtitle("1st Floor Area")
+ggplot(myhouse_train, aes(x=X2ndFlrSF))+geom_histogram()+ggtitle("2nd Floor Area")
+ggplot(myhouse_train, aes(x=LowQualFinSF))+geom_histogram()+ggtitle("Low Ql Floor Area")
+ggplot(myhouse_train, aes(x=GrLivArea))+geom_histogram()+ggtitle("Above Ground Living Area")
+
+```
+Useless: Low QL Floor Area. Nearly all 0's
+
+## Room/Bath/Fireplace Counts (8 Variables)
+```{r}
+ggplot(myhouse_train, aes(x=BsmtFullBath))+geom_bar()
+ggplot(myhouse_train, aes(x=BsmtHalfBath))+geom_bar()
+ggplot(myhouse_train, aes(x=FullBath))+geom_bar()
+ggplot(myhouse_train, aes(x=HalfBath))+geom_bar()
+ggplot(myhouse_train, aes(x=BedroomAbvGr))+geom_bar()
+ggplot(myhouse_train, aes(x=KitchenAbvGr))+geom_bar()
+ggplot(myhouse_train, aes(x=TotRmsAbvGrd))+geom_bar()
+ggplot(myhouse_train, aes(x=Fireplaces))+geom_bar()
+```
+
+## Quality Factors/Categorical (6 Variables)
+```{r}
+ggplot(myhouse_train, aes(x=HeatingQC))+geom_bar()
+ggplot(myhouse_train, aes(x=Electrical))+geom_bar()
+ggplot(myhouse_train, aes(x=CentralAir))+geom_bar()
+ggplot(myhouse_train, aes(x=KitchenQual))+geom_bar()
+ggplot(myhouse_train, aes(x=FireplaceQu))+geom_bar()
+ggplot(myhouse_train, aes(x=GarageType))+geom_bar()
+```
+Electrical is just mostly SBrkr Type
+
+#Year Built
+```{r}
+ggplot(myhouse_train, aes(x=GarageYrBlt))+geom_histogram()
+```
+
+##Numerical Columns
+```{r mynumcols}
+num_cols <- sapply(myhouse_train, is.numeric)
+num_myhouse_train=myhouse_train[,num_cols]
+```
+## Scatter with SalePrice
+```{r}
+num_myhouse_train
+plot(num_myhouse_train$X1stFlrSF,num_myhouse_train$SalePrice)
+plot(num_myhouse_train$X2ndFlrSF,num_myhouse_train$SalePrice)
+plot(num_myhouse_train$GrLivArea,num_myhouse_train$SalePrice)
+```
+Strong:
+```{r}
+
+ggplot(num_myhouse_train, aes(x=as.factor(num_myhouse_train$BsmtFullBath),y=SalePrice))+geom_violin()+geom_boxplot(width=.1)
+ggplot(num_myhouse_train, aes(x=as.factor(num_myhouse_train$BsmtHalfBath),y=SalePrice))+geom_violin()+geom_boxplot(width=.1)
+ggplot(num_myhouse_train, aes(x=as.factor(num_myhouse_train$FullBath),y=SalePrice))+geom_violin()+geom_boxplot(width=.1)
+ggplot(num_myhouse_train, aes(x=as.factor(num_myhouse_train$HalfBath),y=SalePrice))+geom_violin()+geom_boxplot(width=.1)
+ggplot(num_myhouse_train, aes(x=as.factor(num_myhouse_train$BedroomAbvGr),y=SalePrice))+geom_violin()+geom_boxplot(width=.1)
+ggplot(num_myhouse_train, aes(x=as.factor(myhouse_train$KitchenAbvGr),y=SalePrice))+geom_violin()+geom_boxplot(width=.1)
+ggplot(num_myhouse_train, aes(x=as.factor(num_myhouse_train$TotRmsAbvGrd),y=SalePrice))+geom_violin()+geom_boxplot(width=.1)
+ggplot(num_myhouse_train, aes(x=as.factor(num_myhouse_train$Fireplaces),y=SalePrice))+geom_violin()+geom_boxplot(width=.1)
+
+
+```
+Kitchen Above Ground doesn't seem useful
+Bedroom Above Ground doesn't have a clear relationship with Prices
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
