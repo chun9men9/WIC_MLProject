@@ -1,0 +1,56 @@
+---
+title: "data_prep"
+author: "chungmeng"
+date: "November 2, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+```{r load data}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(reshape2)
+load('house_loaded.RData')
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r Corrplot}
+num_cols <- sapply(house_train, is.numeric)
+num_house_train=house_train[,num_cols]
+num_house_train
+source('corplot.R')
+corplot(num_house_train)
+
+```
+
+
+High Correlations
+Garage Cars
+```{r Explore SalePrice vs OverallQual}
+colSums(is.na(house_train)) * 100 / nrow(house_train)
+plot(house_train$OverallQual,house_train$SalePrice)
+ggplot(house_train, aes(x=OverallQual,y=log(SalePrice)))+geom_violin()+geom_boxplot(width=.1)
+house_train%>%group_by(OverallQual)%>%summarise(sd(SalePrice),min(SalePrice),max(SalePrice),mean(SalePrice))
+
+
+summary(house_train)
+```
+
+## MS Zoning
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+house_train$MSZoning=(house_train$MSZoning=='RM')
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
