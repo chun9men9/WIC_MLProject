@@ -58,6 +58,15 @@ for (varname in names(factorLevel)) {
   }
 }
 
+# for (varname in names(factorLevel)) {
+#   levelDiff <- setdiff(unique(house_test[[varname]]), 
+#                        factorLevel[[varname]])
+#   if(length(levelDiff)) {
+#     print(paste(varname, 
+#                 paste(levelDiff, collapse = ", "), 
+#                 sep = ": "))
+#   }
+# }
 ```
 ### 2.4 Fixing level names
 

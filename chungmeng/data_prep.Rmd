@@ -54,3 +54,10 @@ house_train$MSZoning=(house_train$MSZoning=='RM')
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+## ExterQual
+```{r}
+summary(house_train)
+```
+
