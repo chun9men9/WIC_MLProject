@@ -168,7 +168,7 @@ save(house_train, file =  "house_train.Rda")
 name_vec <- c("MSZoning", "Neighborhood", "HouseStyle", "OverallQual", "YearBuilt", "ExterQual",
               "Foundation", "BsmtQual", "X1stFlrSF", "X2ndFlrSF", "GrLivArea", "FullBath",
               "TotRmsAbvGrd" ,"GarageFinish", "GarageCars", "GarageArea", "GarageQual",
-              "GarageCond", "PavedDrive", "SaleType", "SaleCondition")
+              "GarageCond", "PavedDrive", "SaleType", "SaleCondition", "SalePrice")
 
 
 train_sub <- house_train %>% select(., name_vec)
@@ -191,7 +191,6 @@ It appears that all the garage variables have the same observations with missing
 ```{r inspect_missing}
 missing_df <- train_sub[rowSums(is.na(train_sub))>0,] #checking all observations with missing
 train_sub[rowSums(is.na(train_sub))>3,] #checking observations with all 4 variables missing
-table()
 ```
 
 ### Relabel missing values with "None"
