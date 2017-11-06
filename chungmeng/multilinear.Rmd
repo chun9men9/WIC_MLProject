@@ -1,0 +1,100 @@
+---
+title: "multilinear"
+author: "chungmeng"
+date: "November 4, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(reshape2)
+library(car)
+library(caret)
+library(glmnet)
+load('house_prep_v1.RData')
+house_train$SaleType=as.factor(house_train$SaleType)
+house_train$SaleCondition=as.factor(house_train$SaleCondition)
+#Root Mean Squared FUnction
+RMSE=function(x1,x2){
+  return(sqrt(mean((x1-x2)^2)))
+}
+```
+
+## Simple Multi Linear Regression
+```{r}
+set.seed(0) #Extract 20% as Test Set
+test=sample(x=1:nrow(house_train),size = round(0.2*nrow(house_train)))
+train=(-test)
+multlin.model = lm(SalePrice~.,house_train[train, ])
+summary(multlin.model)
+#influencePlot(multlin.model)
+pred.SalePrice=predict(multlin.model,newdata =house_train[test, -13])
+prediction_df=data.frame(SalePrice=house_train[test,'SalePrice'], MultiLin=pred.SalePrice)
+View(prediction_df)
+ggplot()+
+  geom_point(aes(y=pred.SalePrice, x=house_train[test,'SalePrice'], col='r')) #+
+# ggplot()+
+#   geom_histogram(aes(x=house_train[test,'SalePrice']))
+# ggplot()+
+#   geom_histogram(aes(x=pred.SalePrice))
+# mean((house_train[test,'SalePrice']-pred.SalePrice)^2)
+# ggplot()+
+#   geom_histogram(aes(x=(house_train[test,'SalePrice']-pred.SalePrice)))
+#plot(x=1:length(test),house_train[test,'SalePrice'],col='red')
+
+
+multilin.RMSLE=RMSE(log(house_train[test,'SalePrice']),log(pred.SalePrice))
+multilin.RMSLE
+```
+## 
+```{r AIC Caret }
+trained=train(SalePrice ~., data=house_train[train,], 
+      method="glmStepAIC", k=2,
+      trControl=trainControl(method="none"))
+summary(trained)
+```
+
+## 10-Folds Cross Validation (glmnet)
+## Setup Test and Training Dataset
+
+```{r cars}
+x=model.matrix(SalePrice~.,house_train)[,-1] #Discard Intercept
+y=house_train$SalePrice
+
+grid=10^(seq(7,-1,length.out = 100))
+
+#First Run 10-Folds CV to Determine Best Lambda
+cv.ridge.model = cv.glmnet(x[train, ], y[train],
+                         lambda = grid, alpha = 0, nfolds = 10)
+plot(cv.ridge.model, main = "Ridge Regression\n")
+coef(cv.ridge.model)
+bestlambda.cv.ridge = cv.ridge.model$lambda.min
+bestlambda.cv.ridge
+log(bestlambda.cv.ridge)
+
+#Let's create the GLM Model with Best Lambda
+ridge.model = glmnet(x[train, ], y[train], alpha = 0, lambda = grid)
+#What is the test MSE associated with this best value of lambda?
+pred.ridge = predict(ridge.model, s = bestlambda.cv.ridge, newx = x[test, ])
+mean((pred.ridge - y[test])^2)
+RMSE(log(pred.ridge),log(y[test]))
+prediction_df=data.frame(prediction_df,RidgeCV=as.numeric(pred.ridge))
+head(prediction_df)
+```
+
+
+
+## Ridge Regression
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
