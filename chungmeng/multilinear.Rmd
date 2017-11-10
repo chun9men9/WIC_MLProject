@@ -16,6 +16,8 @@ library(reshape2)
 library(car)
 library(caret)
 library(glmnet)
+library(randomForest)
+library(gbm)
 load('house_prep_v1.RData')
 house_train$SaleType=as.factor(house_train$SaleType)
 house_train$SaleCondition=as.factor(house_train$SaleCondition)
@@ -89,12 +91,29 @@ head(prediction_df)
 
 
 
-## Ridge Regression
+## Random Forest
 
 You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
+set.seed(0)
+rf.house=randomForest(SalePrice~.,data=house_train, subset=train)
+rf.house
+pred.rf.house=predict(rf.house, newdata =house_train[test,])
+prediction_df=data.frame(prediction_df,RForest=as.numeric(pred.rf.house))
+RMSE(log(house_train[test,'SalePrice']),log(pred.rf.house))
+```
 
+## Gradient Boosted Model (GBM)
+```{r}
+set.seed(0)
+boost.house = gbm(SalePrice ~ ., data = house_train[train, ],
+                   distribution = "gaussian",
+                   n.trees = 10000,
+                   interaction.depth = 4)
+n.trees = seq(from = 100, to = 10000, by = 100)
+pred.boost.house=predict(boost.house, newdata=house_train[test,], n.trees=n.trees, type="response" )
+RMSE(log(house_train[test,'SalePrice']),log(pred.boost.house))
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

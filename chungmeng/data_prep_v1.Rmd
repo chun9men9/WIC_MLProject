@@ -67,11 +67,9 @@ data_transform=function(data_set){
     }
   }
   data_set$Foundation=sapply(data_set$Foundation, replace_fac) 
-  data_set$PavedDrive=(data_set$PavedDrive!='N')
   data_set$SaleType=ifelse(data_set$SaleType=='New','New','Old')
   data_set$SaleCondition=ifelse(data_set$SaleCondition=='Partial','Partial','Full')
   data_set$Foundation=as.factor(data_set$Foundation)
-  data_set$PavedDrive=as.factor(data_set$PavedDrive)
   data_set$SaleType=as.factor(data_set$SaleType)
   data_set$SaleCondition=as.factor(data_set$SaleCondition)
   #summary(data_set)
@@ -102,7 +100,6 @@ replace_fac=function(x){
   }
 }
 house_train$Foundation=sapply(house_train$Foundation, replace_fac) 
-house_train$PavedDrive=(house_train$PavedDrive!='N')
 house_train$SaleType=ifelse(house_train$SaleType=='New','New','Old')
 house_train$SaleCondition=ifelse(house_train$SaleCondition=='Partial','Partial','Full')
 house_train$Foundation=as.factor(house_train$Foundation)
