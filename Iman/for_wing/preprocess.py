@@ -93,7 +93,6 @@ def derived_vars(all_data):
 	all_data['TotalFinishedSF'] = all_data['BsmtFinSF1'] + all_data['BsmtFinSF2'] + all_data['GrLivArea']
 	all_data['HighQualFinishedSF'] = all_data['TotalSF'] - all_data['LowQualFinSF']
 
-
 	# Adding total baths feature 
 	all_data['TotalBaths'] = all_data['FullBath'] + all_data['BsmtFullBath'] + (.5 * (all_data['HalfBath'] + all_data['BsmtHalfBath']))
 
@@ -104,7 +103,6 @@ def interact_vars(all_data):
 	all_data['OverallQual * TotalBaths'] = all_data['OverallQual'] * all_data['TotalBaths']
 	all_data['OverallQual * TotalSF'] = all_data['OverallQual'] * all_data['TotalSF']
 	all_data['TotalBaths * TotalSF'] = all_data['TotalBaths'] * all_data['TotalSF']
-	#all_data['GarageCars * GarageArea'] = all_data['GarageCars'].astype(int) * all_data['GarageArea']
 
 	# Categorical Var Interactions
 	all_data['OverallQual + OverallCond'] = all_data['OverallQual'].astype(str) + "+" + all_data['OverallCond'].astype(str) 
@@ -113,6 +111,11 @@ def interact_vars(all_data):
 	all_data['ExterQual + ExterCond'] = all_data['ExterQual'] + "+" + all_data['ExterCond']
 	all_data['Heating + HeatingQC'] = all_data['Heating'] + "+" + all_data['HeatingQC']
 	all_data['SaleType + SaleCondition'] = all_data['SaleType'] + "+" + all_data['SaleCondition']
+	all_data['Neighborhood + BldgType + HouseStyle'] = all_data['Neighborhood'] + "+" + all_data['BldgType']+ "+" + all_data['HouseStyle']
+	all_data['Neighborhood + Condition1 + Condition2'] = all_data['Neighborhood'] + "+" + all_data['Condition1']+ "+" + all_data['Condition2']
+	all_data['Neighborhood + OverallQual + OverallCond'] = all_data['Neighborhood'] + all_data['OverallQual'].astype(str) + "+" + all_data['OverallCond'].astype(str) 
+
+
 
 	return all_data
 
