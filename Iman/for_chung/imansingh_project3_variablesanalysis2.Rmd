@@ -21,7 +21,7 @@ library(VIM)
 #library(caret)
 #library(RANN)
 library(reshape2)
-house_train <- read.csv("~/Documents/NYC Data Science Academy/Project_3_Kaggle/train.csv", 
+house_train <- read.csv("../../data/train.csv", 
                         header = TRUE, 
                         na.strings = c("", "NA"),
                         stringsAsFactors = TRUE)
@@ -98,7 +98,6 @@ ggplot(data = numeric_melt, mapping = aes(x = value)) +
 ```
 
 ```{r scatterplots}
-library(theme)
 
 g <- ggplot(house_sub, aes(y=SalePrice))
 
@@ -106,7 +105,7 @@ g + geom_point(aes(x=OverallQual))
 g + geom_point(aes(x=YearBuilt))
 g + geom_point(aes(x=X1stFlrSF))
 g + geom_point(aes(x=X2ndFlrSF))
-g + geom_point(aes(x=GrLivArea, color = OverallQual)) + scale_color_gradient(low = "brown", high = "yellow") + theme_dar
+g + geom_point(aes(x=GrLivArea, color = OverallQual)) + scale_color_gradient(low = "firebrick4",space = OverallQual, high = "yellow") + theme_dark() + scale_y_continuous(name="Sale Price ($)", labels = scales::comma, breaks=seq(0,900000,100000))+xlab('Above Ground Living Area (sq.ft.)') + ggtitle("Sale Price vs Living Area (sq. ft.)")
 g + geom_point(aes(x=FullBath))
 g + geom_point(aes(x=TotRmsAbvGrd))
 g + geom_point(aes(x=GarageCars))
