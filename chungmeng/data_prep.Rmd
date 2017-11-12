@@ -1,15 +1,29 @@
 ---
-title: "data_prep"
+title: "data_prep_v1"
 author: "chungmeng"
-date: "November 2, 2017"
+date: "November 4, 2017"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 ```
-```{r load data}
+
+## Data Prep Version 1
+
+Further Preparation From Data Subset (Shortlisted),
+Further Selection:
+-Drop Vars:  MSZoning, Neighborhood, House Style, ExterQual,GarageCars
+-Remain Vars: OverallQual, YearBuilt, ExterQual, Foundation, BsmtQual, GrLivArea, 
+                FullBath, TotalRmsAbvGrd, GarageFinish, GarageArea, PavedDrive, SaleType, SaleCondition
+Data Transform:
+1. Foundation : Reduce to PConc, BrkTile, CBlock, Others
+2. PavedDrive : N vs Y
+3. SaleType : New vs Non-New
+4. SaleCondition : Partial vs Non-Partial
+
+
+```{r cars}
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -17,47 +31,88 @@ library(reshape2)
 load('house_loaded.RData')
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-```{r Corrplot}
-num_cols <- sapply(house_train, is.numeric)
-num_house_train=house_train[,num_cols]
-num_house_train
-source('corplot.R')
-corplot(num_house_train)
-
-```
-
-
-High Correlations
-Garage Cars
-```{r Explore SalePrice vs OverallQual}
-colSums(is.na(house_train)) * 100 / nrow(house_train)
-plot(house_train$OverallQual,house_train$SalePrice)
-ggplot(house_train, aes(x=OverallQual,y=log(SalePrice)))+geom_violin()+geom_boxplot(width=.1)
-house_train%>%group_by(OverallQual)%>%summarise(sd(SalePrice),min(SalePrice),max(SalePrice),mean(SalePrice))
-
-
-summary(house_train)
-```
-
-## MS Zoning
-
-You can also embed plots, for example:
+## Dropping Vars
 
 ```{r pressure, echo=FALSE}
-house_train$MSZoning=(house_train$MSZoning=='RM')
+drop=which(names(house_train) %in% c('MSZoning','Neighborhood','HouseStyle','ExterQual','GarageCars'))
+#vars=(-drop
+house_train=house_train[,-drop]
+house_test=house_test[,-drop]
+summary(house_train)
+cat(paste0(rep('*',40)),'\n')
+summary(house_test)
+```
+#Imputation for NA's in Test Data Set
+```{r}
+#Only 1 NA in GarageArea. Impute with 0
+row_ind=which(is.na(house_test$GarageArea))
+house_test$GarageArea[row_ind]=0
+#Only 1 NA in SaleType. Impute with 'Oth'
+row_ind=which(is.na(house_test$SaleType))
+house_test$SaleType[row_ind]='Oth'
+summary(house_test)
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-
-## ExterQual
+## Data Transform
 ```{r}
+data_transform=function(data_set){
+  replace_fac=function(x){
+    if (x %in% c('Slab','Stone','Wood')){
+      return('Others')
+    }
+    else{
+      return(as.character(x))
+    }
+  }
+  data_set$Foundation=sapply(data_set$Foundation, replace_fac) 
+  data_set$SaleType=ifelse(data_set$SaleType=='New','New','Old')
+  data_set$SaleCondition=ifelse(data_set$SaleCondition=='Partial','Partial','Full')
+  data_set$Foundation=as.factor(data_set$Foundation)
+  data_set$SaleType=as.factor(data_set$SaleType)
+  data_set$SaleCondition=as.factor(data_set$SaleCondition)
+  #summary(data_set)
+  return(data_set)
+}
+
+```
+
+```{r}
+
+house_train=data_transform(house_train)
+#View(house_train_out)
+summary(house_train)
+
+
+house_test=data_transform(house_test)
+#View(house_test_out)
+summary(house_test)
+```
+
+```{r}
+replace_fac=function(x){
+  if (x %in% c('Slab','Stone','Wood')){
+    return('Others')
+  }
+  else{
+    return(as.character(x))
+  }
+}
+house_train$Foundation=sapply(house_train$Foundation, replace_fac) 
+house_train$SaleType=ifelse(house_train$SaleType=='New','New','Old')
+house_train$SaleCondition=ifelse(house_train$SaleCondition=='Partial','Partial','Full')
+house_train$Foundation=as.factor(house_train$Foundation)
 summary(house_train)
 ```
+## Save Data Prep Version 1
+
+```{r save_loaded}
+house_train$Id <- NULL
+rownames(house_test) <- house_test$Id
+house_test$Id <- NULL
+save(house_train, house_test, file = "./house_prep_v1.RData")
+```
+
+
 
