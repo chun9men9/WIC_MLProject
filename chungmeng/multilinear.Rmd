@@ -39,16 +39,7 @@ pred.SalePrice=predict(multlin.model,newdata =house_train[test, -13])
 prediction_df=data.frame(SalePrice=house_train[test,'SalePrice'], MultiLin=pred.SalePrice)
 View(prediction_df)
 ggplot()+
-  geom_point(aes(y=pred.SalePrice, x=house_train[test,'SalePrice'], col='r')) #+
-# ggplot()+
-#   geom_histogram(aes(x=house_train[test,'SalePrice']))
-# ggplot()+
-#   geom_histogram(aes(x=pred.SalePrice))
-# mean((house_train[test,'SalePrice']-pred.SalePrice)^2)
-# ggplot()+
-#   geom_histogram(aes(x=(house_train[test,'SalePrice']-pred.SalePrice)))
-#plot(x=1:length(test),house_train[test,'SalePrice'],col='red')
-
+  geom_point(aes(y=pred.SalePrice, x=house_train[test,'SalePrice'], col='r'))
 
 multilin.RMSLE=RMSE(log(house_train[test,'SalePrice']),log(pred.SalePrice))
 multilin.RMSLE
