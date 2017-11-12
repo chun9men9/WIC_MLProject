@@ -18,3 +18,6 @@ bindrcpp
 Matrix
 foreach
 glmnet
+survival
+gbm
+plyr
